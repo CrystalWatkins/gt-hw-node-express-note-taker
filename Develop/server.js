@@ -7,6 +7,17 @@ const fs = ("fs");
 const app = express();
 // create a PORT
 const PORT = process.env.PORT || 3000;
+
+// CONFIRM WITH LINE 12-14 goes here for data-parse POST
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"))
+});
+app.get("/notes", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/notes.html"))
+});
+
+
 // listen to that port
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
