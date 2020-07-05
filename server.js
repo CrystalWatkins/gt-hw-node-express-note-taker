@@ -27,8 +27,24 @@ app.get("/api/notes", (req, res) => {
     });
 });
 
-app.post("/api")
-
+app.post("/api/notes", (req, res) => {
+    fs.readFile("./db/quotes.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occurred reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        arrayOfNotes.push(req.body);
+        fs.writeFile("./db/db.json",
+        JSON.stringify(arrayOfNotes), "utf8", 
+        (err) => {
+            if (err) {
+                return res.send("An error occurred writing your data");
+            }
+            res.json(arrayOfNotes);
+        }
+        );
+    });
+});
 
 // listen to that port
 app.listen(PORT, () => {
