@@ -17,17 +17,16 @@ app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"))
 });
 
+// app.get("./db/db.json", (req, res) => {
+//     fs
+// })
+
 
 // listen to that port
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
 });
 
-// * The following HTML routes should be created:
-
-//   * GET `/notes` - Should return the `notes.html` file.
-
-//   * GET `*` - Should return the `index.html` file
 
 // * The application should have a `db.json` file on the backend that will be 
 // used to store and retrieve notes using the `fs` module.
@@ -45,4 +44,4 @@ app.listen(PORT, () => {
 //   each note a unique `id` when it's saved. 
 //   In order to delete a note, you'll need to read all notes from the `db.json` 
 //   file, remove the note with the given `id` property, and then rewrite the notes 
-//   to the `db.json` file.
+//   to the `db.json` file
