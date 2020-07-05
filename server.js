@@ -2,7 +2,6 @@
 const express = require("express");
 const path = require("path");
 const fs = ("fs");
-
 // Create an instance of Express- app
 const app = express();
 // create a PORT
@@ -10,12 +9,25 @@ const PORT = process.env.PORT || 3000;
 
 // CONFIRM WITH LINE 12-14 goes here for data-parse POST
 
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"))
 });
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"))
 });
+
+//Displays all the notes on the page
+app.get("/api/notes", (req, res) => {
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occurred reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        res.JSON(arrayOfNotes);
+    });
+});
+
+app.post("/api")
 
 
 // listen to that port
@@ -23,11 +35,7 @@ app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
 });
 
-// * The following HTML routes should be created:
 
-//   * GET `/notes` - Should return the `notes.html` file.
-
-//   * GET `*` - Should return the `index.html` file
 
 // * The application should have a `db.json` file on the backend that will be 
 // used to store and retrieve notes using the `fs` module.
