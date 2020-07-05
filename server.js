@@ -22,8 +22,8 @@ app.get("/api/notes", (req, res) => {
         if (err) {
             return res.send("An error occurred reading your data");
         }
-        const arrayOfNotes = JSON.parse(data);
-        res.JSON(arrayOfNotes);
+        // const arrayOfNotes = JSON.parse(data);
+        res.JSON(data);
     });
 });
 
