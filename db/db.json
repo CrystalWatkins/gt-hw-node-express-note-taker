@@ -1,1 +1,6 @@
-[object Object],
+[
+    {
+        "title": "Test Title",
+        "text": "Test text"
+    }
+]
