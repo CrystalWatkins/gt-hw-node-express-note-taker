@@ -7,9 +7,13 @@ const app = express();
 // create a PORT
 const PORT = process.env.PORT || 3000;
 
+// Add data processing for POST routes
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// ADD THIS LINE!!!
+app.use(express.static("public"));
 
+//View / HTML
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"))
 });
@@ -17,7 +21,7 @@ app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"))
 });
 
-//Displays all the notes on the page
+//Displays all the notes on the page // API/ JSON
 app.get("/api/notes", (req, res) => {
     fs.readFile("./db/db.json", "utf8", (err, data) => {
         if (err) {
