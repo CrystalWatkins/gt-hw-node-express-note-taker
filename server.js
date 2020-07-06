@@ -37,7 +37,7 @@ app.post("/api/notes", (req, res) => {
         const arrayOfNotes = JSON.parse(data);
         arrayOfNotes.push(req.body);
         //write the data back to the file
-        fs.writeFile("./db/db.json", arrayOfNotes, "utf8", (err) => {
+        fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), "utf8", (err) => {
             if (err) {
                 return res.send("An error occurred writing your data");
             }
