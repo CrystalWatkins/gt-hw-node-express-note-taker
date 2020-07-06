@@ -29,24 +29,22 @@ app.get("/api/notes", (req, res) => {
 });
 
 // Add a new note via a  POST request
-// app.post("/api/notes", (req, res) => {
-//     fs.readFile("./db/quotes.json", "utf8", (err, data) => {
-//         if (err) {
-//             return res.send("An error occurred reading your data");
-//         }
-//         const arrayOfNotes = JSON.parse(data);
-//         arrayOfNotes.push(req.body);
-//         fs.writeFile("./db/db.json",
-//         JSON.stringify(arrayOfNotes), "utf8", 
-//         (err) => {
-//             if (err) {
-//                 return res.send("An error occurred writing your data");
-//             }
-//             res.json(arrayOfNotes);
-//         }
-//         );
-//     });
-// });
+app.post("/api/notes", (req, res) => {
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occurred reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        arrayOfNotes.push(req.body);
+        //write the data back to the file
+        fs.writeFile("./db/db.json", arrayOfNotes, "utf8", (err) => {
+            if (err) {
+                return res.send("An error occurred writing your data");
+            }
+            res.json(arrayOfNotes);
+        });
+    });
+});
 
 // listen to that port
 app.listen(PORT, () => {
