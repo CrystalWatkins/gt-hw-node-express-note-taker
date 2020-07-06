@@ -7,8 +7,8 @@ const app = express();
 // create a PORT
 const PORT = process.env.PORT || 3000;
 
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"))
@@ -35,7 +35,9 @@ app.post("/api/notes", (req, res) => {
             return res.send("An error occurred reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
+        console.log(data);
         arrayOfNotes.push(req.body);
+        console.log(req.body);
         //write the data back to the file
         fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), "utf8", (err) => {
             if (err) {
