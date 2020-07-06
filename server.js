@@ -1,26 +1,53 @@
 // Require express
 const express = require("express");
 const path = require("path");
-const fs = ("fs");
-
+const fs = require("fs");
 // Create an instance of Express- app
 const app = express();
 // create a PORT
 const PORT = process.env.PORT || 3000;
 
-// CONFIRM WITH LINE 12-14 goes here for data-parse POST
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"))
 });
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"))
+})
+
+//Displays all the notes on the page
+app.get("/api/notes", (req, res) => {
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occurred reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        res.json(arrayOfNotes);
+    });
 });
 
-// app.get("./db/db.json", (req, res) => {
-//     fs
-// })
-
+// Add a new note via a  POST request
+app.post("/api/notes", (req, res) => {
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occurred reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        console.log(data);
+        arrayOfNotes.push(req.body);
+        console.log(req.body);
+        //write the data back to the file
+        fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), "utf8", (err) => {
+            if (err) {
+                return res.send("An error occurred writing your data");
+            }
+            res.json(arrayOfNotes);
+        });
+    });
+});
 
 // listen to that port
 app.listen(PORT, () => {
