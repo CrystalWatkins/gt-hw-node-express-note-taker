@@ -11,12 +11,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"))
 });
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"))
 })
+
 
 //Displays all the notes on the page
 app.get("/api/notes", (req, res) => {
@@ -38,7 +39,11 @@ app.post("/api/notes", (req, res) => {
         const arrayOfNotes = JSON.parse(data);
         console.log(data);
         arrayOfNotes.push(req.body);
-        console.log(req.body);
+       for(var i =0; i < arrayOfNotes.length; i++){
+        if(data === arrayOfNotes[i].routeName) {
+            return res.json(arrayOfNotes[i]);
+        }
+       }
         //write the data back to the file
         fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), "utf8", (err) => {
             if (err) {
@@ -48,6 +53,17 @@ app.post("/api/notes", (req, res) => {
         });
     });
 });
+
+// $(".delete-note").on("click", deleteNote);
+// app.delete("/api/notes/:id", (req, res) => {
+//     fs.readFile("/db/db.json", (err, data) =>{
+//         if (err) {
+//             return res.send("An error occurred deleting your data");
+//         }
+
+//     })
+// })
+
 
 // listen to that port
 app.listen(PORT, () => {
