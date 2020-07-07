@@ -53,7 +53,7 @@ app.delete("/api/notes/:id", (req, res) => {
             return res.send("An error occurred reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
-        const newNotes = arrayOfNotes.slice(req.params.id);
+        const newNotes = arrayOfNotes.filter((user) => user.id != req.params.id);
 
         fs.writeFile("./db/db.json", JSON.stringify(newNotes), "utf8", (err, data) => {
             if (err) {
