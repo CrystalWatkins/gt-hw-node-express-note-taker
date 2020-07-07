@@ -11,9 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "./public/index.html"))
-});
+
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"))
 })
@@ -37,15 +35,10 @@ app.post("/api/notes", (req, res) => {
             return res.send("An error occurred reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
-        console.log(data);
-        arrayOfNotes.push(req.body);
-       for(var i =0; i < arrayOfNotes.length; i++){
-        if(data === arrayOfNotes[i].routeName) {
-            return res.json(arrayOfNotes[i]);
-        }
-       }
+            arrayOfNotes.push(req.body);
+            arrayOfNotes.map((obj, i) => (obj.id = ++i));
         //write the data back to the file
-        fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), "utf8", (err) => {
+        fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), "utf8", (err, data) => {
             if (err) {
                 return res.send("An error occurred writing your data");
             }
@@ -54,17 +47,25 @@ app.post("/api/notes", (req, res) => {
     });
 });
 
-// $(".delete-note").on("click", deleteNote);
-// app.delete("/api/notes/:id", (req, res) => {
-//     fs.readFile("/db/db.json", (err, data) =>{
-//         if (err) {
-//             return res.send("An error occurred deleting your data");
-//         }
+app.delete("/api/notes/:id", (req, res) => {
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occurred reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        const newNotes = arrayOfNotes.slice(req.params.id);
 
-//     })
-// })
-
-
+        fs.writeFile("./db/db.json", JSON.stringify(newNotes), "utf8", (err, data) => {
+            if (err) {
+                return res.send("An error occurred writing your data");
+            }
+            res.json(arrayOfNotes);
+        });
+    });
+});
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"))
+});
 // listen to that port
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
